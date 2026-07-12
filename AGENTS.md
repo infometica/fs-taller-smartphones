@@ -142,8 +142,23 @@ ticket"** (plugin `PrintTicket`, ya buggeado de antes, no relacionado con
 nosotros). El único sitio donde vive nuestro diseño de dos copias es el
 botón **"Imprimir parte"** (`ImprimirParteTaller`).
 
+## El contenido debe caber en una sola página A5 (¡medirlo, no adivinarlo!)
+
+El área útil de A5 apaisado con `margin: 8mm` es ~733×499px (96dpi). La copia
+"taller" (con checklist) es la más alta y quedó midiendo 520px en la primera
+versión → se desbordaba 21px a una segunda página, dejando "Firma del
+cliente" sola y una página en blanco. Ajustado el espaciado (títulos, campos,
+firma) hasta 432px de alto.
+
+Para comprobar esto sin depender de "a ojo" ni de pedir capturas al usuario:
+renderizar la plantilla real (técnica de `requiresAuth=false` por Reflection,
+ver sección de impresión más abajo) y medir con Chromium headless
+(`getBoundingClientRect().height` de `.ticket-half` con
+`page.emulateMedia({media:'print'})` y viewport = ancho útil de A5) contra el
+alto disponible. Si se añaden más campos al checklist en el futuro, volver a
+medir así antes de darlo por bueno.
+
 ## Pendiente
 
-- Confirmar con el usuario, ya con `Init.php` desplegado, que el botón
-  "Imprimir parte" aparece en `EditServicioAT` y que el resultado le
-  convence (campos, orden, texto legal).
+- Confirmar con el usuario que el PDF ya sale en una sola página y que el
+  botón "Imprimir parte" funciona bien en su panel.
