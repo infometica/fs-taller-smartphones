@@ -112,8 +112,38 @@ Si algo se ejecutó por error como root, comprobar
 `find /var/www/facturascripts -not -user www-data` para detectar y corregir
 archivos/carpetas con dueño incorrecto.
 
+## Init.php es obligatorio para que las Extension/Controller funcionen
+
+`Extension/Table` y `Extension/XMLView` se fusionan automáticamente por
+`PluginsDeploy` (mecanismo por archivos). **`Extension/Controller` y
+`Extension/Model` NO**: requieren que el plugin tenga un `Init.php`
+(`class Init extends \FacturaScripts\Core\Template\InitClass`) cuyo
+método `init()` llame explícitamente a
+`$this->loadExtension(new Extension\Controller\EditServicioAT())` (ver
+`Core/Template/InitClass::loadExtension()`). Sin esto, la clase de extensión
+existe pero nunca se registra vía `addExtension()`, y sus métodos
+(`createViews`, `loadData`, etc.) nunca se llaman — pasó exactamente esto:
+el botón "Imprimir parte" no aparecía en ningún servicio hasta que se añadió
+`Init.php` (commit `c714eee`).
+
+Para comprobar si una extensión de controlador está realmente activa:
+`\FacturaScripts\Dinamic\Controller\EditServicioAT::getExtensions()` debe
+incluir el nombre del método (`loadData`, `createViews`, etc.).
+
+## El export genérico (`action=export&option=PDF`) no es nuestra plantilla
+
+Servicios registra su propio exportador para `ServicioAT`
+(`ExportManager::addOptionModel('PDFserviciosExport', 'PDF', 'ServicioAT')`
+en su `Init.php`), que dibuja el PDF a bajo nivel con `Cezpdf` y solo conoce
+los campos que él mismo controla (`descripcion`, `material`, `solucion` según
+los settings `print_pdf_*`). No sabe nada de nuestros campos `ts_*`, así que
+nunca aparecerá el checklist ahí. Lo mismo aplica al botón **"Imprimir
+ticket"** (plugin `PrintTicket`, ya buggeado de antes, no relacionado con
+nosotros). El único sitio donde vive nuestro diseño de dos copias es el
+botón **"Imprimir parte"** (`ImprimirParteTaller`).
+
 ## Pendiente
 
-- Nada bloqueante conocido. Revisar con el usuario si el diseño del parte
-  (campos mostrados, orden, texto legal) necesita ajustes tras verlo en un
-  caso real desde el panel.
+- Confirmar con el usuario, ya con `Init.php` desplegado, que el botón
+  "Imprimir parte" aparece en `EditServicioAT` y que el resultado le
+  convence (campos, orden, texto legal).
