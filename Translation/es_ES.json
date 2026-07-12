@@ -1,0 +1,17 @@
+{
+    "device-data": "Datos del dispositivo",
+    "device-checklist": "Estado físico del equipo entregado por el cliente",
+    "ts-brand": "Marca",
+    "ts-imei": "IMEI",
+    "ts-unlock-code": "Código de desbloqueo",
+    "ts-device-condition": "Condición del equipo",
+    "ts-lcd-screen": "Display / LCD",
+    "ts-touch-screen": "Táctil",
+    "ts-fingerprint-face": "Huella / Face ID",
+    "ts-cameras": "Cámaras",
+    "ts-wifi-bluetooth": "Wifi / Bluetooth",
+    "ts-speakers": "Altavoces",
+    "ts-network": "Red",
+    "ts-earpiece": "Auricular",
+    "ts-back-cover": "Tapa"
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : EditServicioAT.xml (Extension)
+    Description:
+        Añade a la edición de ServicioAT los campos del dispositivo y el
+        checklist de recepción usados por talleres de smartphones/tablets.
+-->
+<view>
+    <columns>
+        <group name="ts-device-data" title="device-data" numcolumns="12">
+            <column name="ts-brand" numcolumns="3" order="10">
+                <widget type="text" fieldname="ts_marca"/>
+            </column>
+            <column name="ts-model" title="model" numcolumns="3" order="20">
+                <widget type="text" fieldname="ts_modelo"/>
+            </column>
+            <column name="ts-color" title="color" numcolumns="3" order="30">
+                <widget type="text" fieldname="ts_color"/>
+            </column>
+            <column name="ts-imei" numcolumns="3" order="40">
+                <widget type="text" fieldname="ts_imei"/>
+            </column>
+            <column name="ts-unlock-code" numcolumns="4" order="50">
+                <widget type="text" fieldname="ts_codigo_desbloqueo"/>
+            </column>
+            <column name="ts-device-condition" numcolumns="8" order="60">
+                <widget type="textarea" fieldname="ts_condicion_equipo" rows="2"/>
+            </column>
+        </group>
+        <group name="ts-device-checklist" title="device-checklist" numcolumns="12">
+            <column name="ts-lcd-screen" numcolumns="4" order="10">
+                <widget type="text" fieldname="ts_lcd"/>
+            </column>
+            <column name="ts-touch-screen" numcolumns="4" order="20">
+                <widget type="text" fieldname="ts_touch"/>
+            </column>
+            <column name="ts-fingerprint-face" numcolumns="4" order="30">
+                <widget type="text" fieldname="ts_huella_face"/>
+            </column>
+            <column name="ts-cameras" numcolumns="4" order="40">
+                <widget type="text" fieldname="ts_camaras"/>
+            </column>
+            <column name="ts-wifi-bluetooth" numcolumns="4" order="50">
+                <widget type="text" fieldname="ts_wifi_bluetooth"/>
+            </column>
+            <column name="ts-speakers" numcolumns="4" order="60">
+                <widget type="text" fieldname="ts_altavoces"/>
+            </column>
+            <column name="ts-network" numcolumns="4" order="70">
+                <widget type="text" fieldname="ts_red"/>
+            </column>
+            <column name="ts-earpiece" numcolumns="4" order="80">
+                <widget type="text" fieldname="ts_auricular"/>
+            </column>
+            <column name="ts-back-cover" numcolumns="4" order="90">
+                <widget type="text" fieldname="ts_tapa"/>
+            </column>
+        </group>
+    </columns>
+</view>

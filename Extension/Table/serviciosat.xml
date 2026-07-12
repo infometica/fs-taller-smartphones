@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : serviciosat.xml
+    Description:
+        Columnas añadidas por el plugin TallerSmartphones a la tabla serviciosat
+        del plugin Servicios: datos del dispositivo y checklist de recepción.
+-->
+<table>
+    <column>
+        <name>ts_marca</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>ts_modelo</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>ts_color</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>ts_imei</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>ts_codigo_desbloqueo</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>ts_condicion_equipo</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>ts_lcd</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_touch</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_huella_face</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_camaras</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_wifi_bluetooth</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_altavoces</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_red</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_auricular</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>ts_tapa</name>
+        <type>character varying(100)</type>
+    </column>
+</table>
