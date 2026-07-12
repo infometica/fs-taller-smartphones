@@ -23,6 +23,17 @@
 
         .ticket-half {
             font-size: 11px;
+            height: 132mm;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ticket-content {
+            flex: 0 0 auto;
+        }
+
+        .signature-spacer {
+            flex: 1 1 auto;
         }
 
         .ticket-half h4 {
@@ -51,21 +62,22 @@
         .field-value {
             min-height: 12px;
             line-height: 1.1;
-            border-bottom: 1px dotted #999;
             margin-bottom: 3px;
         }
 
         .signature-box {
-            margin-top: 8px;
+            flex: 0 0 auto;
             border-top: 1px solid #000;
             padding-top: 2px;
             text-align: center;
         }
 
         .legal-text {
+            flex: 0 0 auto;
             font-size: 8px;
             color: #555;
             margin-top: 4px;
+            margin-bottom: 0;
         }
 
         @media print {
@@ -99,6 +111,7 @@
 
     {% macro parte(fsc, taller) %}
         <div class="ticket-half">
+        <div class="ticket-content">
             <h4>{{ trans('ticket-label') }}: {{ fsc.servicio.codigo }}</h4>
 
             <div class="row">
@@ -200,8 +213,10 @@
                     {{ _self.field(trans('served-by'), fsc.agente.nombre ?? fsc.servicio.nick) }}
                 </div>
             </div>
+        </div>
 
             {% if taller %}
+                <div class="signature-spacer"></div>
                 <div class="signature-box">
                     {{ trans('customer-signature') }}
                 </div>

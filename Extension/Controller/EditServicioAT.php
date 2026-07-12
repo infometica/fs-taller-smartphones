@@ -22,6 +22,7 @@ class EditServicioAT
                     'color' => 'info',
                     'icon' => 'fa-solid fa-print',
                     'label' => 'print-service-ticket',
+                    'target' => '_blank',
                     'type' => 'link'
                 ]);
             }
