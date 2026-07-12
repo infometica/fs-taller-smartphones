@@ -94,6 +94,24 @@ estructura real de la tabla, así que basta con que la columna exista en
   `<base href="https://infometica.com/">` se puede renderizar con un
   Chromium headless local para sacar una captura de verificación.
 
+## Cuidado: scripts puntuales siempre como www-data
+
+El 2026-07-12 un script de verificación (`render_test.php`) se ejecutó como
+`root` (`php script.php`) en vez de `sudo -u www-data php script.php`. Eso
+hizo que FacturaScripts creara `MyFiles/Cache/Twig/` con propietario
+`root:root`, y durante un rato **cualquier página real** que necesitara una
+subcarpeta de caché nueva fallaba para `www-data` con
+`Unable to create the cache directory`. Se detectó por los crash reports en
+`MyFiles/crash_*.json` y se arregló con
+`chown -R www-data:www-data /var/www/facturascripts/MyFiles/Cache`.
+
+**Regla:** cualquier script PHP puntual en este servidor que toque
+FacturaScripts (`Kernel::init()`, instanciar modelos, renderizar vistas, etc.)
+debe ejecutarse siempre como `sudo -u www-data php ...`, nunca como root.
+Si algo se ejecutó por error como root, comprobar
+`find /var/www/facturascripts -not -user www-data` para detectar y corregir
+archivos/carpetas con dueño incorrecto.
+
 ## Pendiente
 
 - Nada bloqueante conocido. Revisar con el usuario si el diseño del parte
