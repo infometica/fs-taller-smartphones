@@ -13,5 +13,11 @@
     "ts-speakers": "Altavoces",
     "ts-network": "Red",
     "ts-earpiece": "Auricular",
-    "ts-back-cover": "Tapa"
+    "ts-back-cover": "Tapa",
+    "served-by": "Le atendió",
+    "print-service-ticket": "Imprimir parte",
+    "print-landscape-reminder": "Recuerda imprimir en horizontal",
+    "landscape": "apaisado",
+    "customer-signature": "Firma del cliente",
+    "signature-acceptance-notice": "La firma de este documento implica la aceptación de todas las condiciones del servicio."
 }
