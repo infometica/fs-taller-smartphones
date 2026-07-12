@@ -158,7 +158,18 @@ ver sección de impresión más abajo) y medir con Chromium headless
 alto disponible. Si se añaden más campos al checklist en el futuro, volver a
 medir así antes de darlo por bueno.
 
+## Diseño de tarjetas: cada px de "aire" sale del hueco de firma
+
+`View/ImprimirParteTaller.html.twig` usa un diseño de tarjetas por grupo
+(Cliente, Datos del dispositivo, Estado físico, Diagnóstico) con acento de
+color. Cualquier padding/margin que se añada a `.section` sale directamente
+del `.signature-spacer` (flex:1 dentro de un `.ticket-half` de altura fija
+132mm) — no hay margen "gratis". Antes de subir cambios de espaciado, medir
+siempre con Chromium headless (ver técnica más abajo) el `spacer` resultante
+en la copia "taller"; que no baje de ~25-30px (~7-8mm) o no queda hueco real
+para firmar a mano.
+
 ## Pendiente
 
-- Confirmar con el usuario que el PDF ya sale en una sola página y que el
-  botón "Imprimir parte" funciona bien en su panel.
+- Confirmar con el usuario que el nuevo diseño (tarjetas, cabecera
+  compacta) le convence y que el PDF sigue saliendo en una sola página.
