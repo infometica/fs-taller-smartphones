@@ -69,8 +69,51 @@ estructura real de la tabla, así que basta con que la columna exista en
   sino la primera vez que se instancia el modelo (`Dinamic\Model\ServicioAT`)
   tras el deploy — hay que forzarlo si se activa por script.
 
+## Impresión del parte de servicio
+
+- `Controller/ImprimirParteTaller.php` + `View/ImprimirParteTaller.html.twig`:
+  página imprimible (no PDF generado por librería, igual que hacía el plugin
+  original) con dos copias lado a lado — cliente (izquierda, sin checklist) y
+  taller (derecha, con el checklist de estado físico y línea de firma del
+  cliente). Extiende `Master/MicroTemplate.html.twig` (layout sin menú/sidebar
+  de FacturaScripts) con CSS `@page { size: A5 landscape }` y
+  `window.print()` automático al cargar.
+- Botón "Imprimir parte" añadido a `EditServicioAT` vía
+  `Extension/Controller/EditServicioAT.php` (`loadData`, botón tipo `link`
+  a `ImprimirParteTaller?code=<id>`, siguiendo el mismo patrón que el botón
+  "copy" del propio `Servicios`).
+- FacturaScripts en este servidor usa `Cezpdf`/`Core/Lib/PDF` (coordenadas
+  fijas) para las facturas, no HTML→PDF con Twig. Para un ticket con este
+  layout es mucho más simple una vista imprimible por navegador (como hacía
+  el plugin original) que generar el PDF a bajo nivel con esa librería.
+- Para previsualizar el render sin sesión de navegador (no hay credenciales
+  del panel disponibles para el agente): instanciar el controller directamente
+  en un script PHP, poner `requiresAuth=false` por Reflection, capturar el
+  `ob_start()`/`run()`, y volcar el HTML. Los assets estáticos
+  (`/fs/node_modules/...`) son públicos sin login, así que añadiendo
+  `<base href="https://infometica.com/">` se puede renderizar con un
+  Chromium headless local para sacar una captura de verificación.
+
+## Cuidado: scripts puntuales siempre como www-data
+
+El 2026-07-12 un script de verificación (`render_test.php`) se ejecutó como
+`root` (`php script.php`) en vez de `sudo -u www-data php script.php`. Eso
+hizo que FacturaScripts creara `MyFiles/Cache/Twig/` con propietario
+`root:root`, y durante un rato **cualquier página real** que necesitara una
+subcarpeta de caché nueva fallaba para `www-data` con
+`Unable to create the cache directory`. Se detectó por los crash reports en
+`MyFiles/crash_*.json` y se arregló con
+`chown -R www-data:www-data /var/www/facturascripts/MyFiles/Cache`.
+
+**Regla:** cualquier script PHP puntual en este servidor que toque
+FacturaScripts (`Kernel::init()`, instanciar modelos, renderizar vistas, etc.)
+debe ejecutarse siempre como `sudo -u www-data php ...`, nunca como root.
+Si algo se ejecutó por error como root, comprobar
+`find /var/www/facturascripts -not -user www-data` para detectar y corregir
+archivos/carpetas con dueño incorrecto.
+
 ## Pendiente
 
-- Réplica del PDF de impresión A5 a doble parte (cliente + taller con firma)
-  que usa el taller actualmente en `movil-go.es` (formato ticket/parte de
-  servicio). Aún no abordado.
+- Nada bloqueante conocido. Revisar con el usuario si el diseño del parte
+  (campos mostrados, orden, texto legal) necesita ajustes tras verlo en un
+  caso real desde el panel.
