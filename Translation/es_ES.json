@@ -19,5 +19,6 @@
     "print-landscape-reminder": "Recuerda imprimir en horizontal",
     "landscape": "apaisado",
     "customer-signature": "Firma del cliente",
-    "signature-acceptance-notice": "La firma de este documento implica la aceptación de todas las condiciones del servicio."
+    "signature-acceptance-notice": "La firma del documento implica la aceptación de todas las condiciones especificadas en el reverso de esta hoja.",
+    "ticket-label": "Parte"
 }

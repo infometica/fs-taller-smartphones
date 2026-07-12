@@ -27,6 +27,7 @@
 
         .ticket-half h4 {
             font-size: 13px;
+            font-weight: bold;
             border-bottom: 1px solid #999;
             padding-bottom: 2px;
             margin-bottom: 6px;
@@ -34,6 +35,7 @@
 
         .ticket-half h5 {
             font-size: 11px;
+            font-weight: bold;
             margin-top: 4px;
             margin-bottom: 3px;
             background: #f2f2f2;
@@ -90,66 +92,57 @@
 {% block messages %}{% endblock %}
 
 {% block body %}
+    {% macro field(label, value) %}
+        <span class="field-label">{{ label }}</span>
+        <span class="field-value">{{ (value is empty) ? '-' : value }}</span>
+    {% endmacro %}
+
     {% macro parte(fsc, taller) %}
         <div class="ticket-half">
-            <h4>{{ trans('service') }}: {{ fsc.servicio.codigo }}</h4>
+            <h4>{{ trans('ticket-label') }}: {{ fsc.servicio.codigo }}</h4>
 
             <div class="row">
                 <div class="col-6">
-                    <span class="field-label">{{ trans('date') }}</span>
-                    <span class="field-value">{{ fsc.servicio.fecha }}</span>
+                    {{ _self.field(trans('date'), fsc.servicio.fecha) }}
                 </div>
                 <div class="col-6">
-                    <span class="field-label">{{ trans('hour') }}</span>
-                    <span class="field-value">{{ fsc.servicio.hora }}</span>
+                    {{ _self.field(trans('hour'), fsc.servicio.hora) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+                    {{ _self.field(trans('customer'), fsc.cliente.nombre) }}
+                </div>
+                <div class="col-4">
+                    {{ _self.field(trans('phone'), fsc.servicio.telefono1) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    {{ _self.field(trans('ts-brand'), fsc.servicio.ts_marca) }}
+                </div>
+                <div class="col-4">
+                    {{ _self.field(trans('model'), fsc.servicio.ts_modelo) }}
+                </div>
+                <div class="col-4">
+                    {{ _self.field(trans('color'), fsc.servicio.ts_color) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    {{ _self.field(trans('ts-imei'), fsc.servicio.ts_imei) }}
+                </div>
+                <div class="col-6">
+                    {{ _self.field(trans('ts-unlock-code'), fsc.servicio.ts_codigo_desbloqueo) }}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-12">
-                    <span class="field-label">{{ trans('customer') }}</span>
-                    <span class="field-value">{{ fsc.cliente.nombre }}</span>
-                </div>
-                <div class="col-6">
-                    <span class="field-label">{{ trans('phone') }}</span>
-                    <span class="field-value">{{ fsc.servicio.telefono1 }}</span>
-                </div>
-                <div class="col-6">
-                    <span class="field-label">{{ trans('phone2') }}</span>
-                    <span class="field-value">{{ fsc.servicio.telefono2 }}</span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-4">
-                    <span class="field-label">{{ trans('ts-brand') }}</span>
-                    <span class="field-value">{{ fsc.servicio.ts_marca }}</span>
-                </div>
-                <div class="col-4">
-                    <span class="field-label">{{ trans('model') }}</span>
-                    <span class="field-value">{{ fsc.servicio.ts_modelo }}</span>
-                </div>
-                <div class="col-4">
-                    <span class="field-label">{{ trans('color') }}</span>
-                    <span class="field-value">{{ fsc.servicio.ts_color }}</span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    <span class="field-label">{{ trans('ts-imei') }}</span>
-                    <span class="field-value">{{ fsc.servicio.ts_imei }}</span>
-                </div>
-                <div class="col-6">
-                    <span class="field-label">{{ trans('ts-unlock-code') }}</span>
-                    <span class="field-value">{{ fsc.servicio.ts_codigo_desbloqueo }}</span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <span class="field-label">{{ trans('ts-device-condition') }}</span>
-                    <span class="field-value">{{ fsc.servicio.ts_condicion_equipo }}</span>
+                    {{ _self.field(trans('ts-device-condition'), fsc.servicio.ts_condicion_equipo) }}
                 </div>
             </div>
 
@@ -157,67 +150,54 @@
                 <h5>{{ trans('device-checklist') }}</h5>
                 <div class="row">
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-lcd-screen') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_lcd }}</span>
+                        {{ _self.field(trans('ts-lcd-screen'), fsc.servicio.ts_lcd) }}
                     </div>
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-touch-screen') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_touch }}</span>
+                        {{ _self.field(trans('ts-touch-screen'), fsc.servicio.ts_touch) }}
                     </div>
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-fingerprint-face') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_huella_face }}</span>
+                        {{ _self.field(trans('ts-fingerprint-face'), fsc.servicio.ts_huella_face) }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-cameras') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_camaras }}</span>
+                        {{ _self.field(trans('ts-cameras'), fsc.servicio.ts_camaras) }}
                     </div>
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-wifi-bluetooth') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_wifi_bluetooth }}</span>
+                        {{ _self.field(trans('ts-wifi-bluetooth'), fsc.servicio.ts_wifi_bluetooth) }}
                     </div>
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-speakers') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_altavoces }}</span>
+                        {{ _self.field(trans('ts-speakers'), fsc.servicio.ts_altavoces) }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-network') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_red }}</span>
+                        {{ _self.field(trans('ts-network'), fsc.servicio.ts_red) }}
                     </div>
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-earpiece') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_auricular }}</span>
+                        {{ _self.field(trans('ts-earpiece'), fsc.servicio.ts_auricular) }}
                     </div>
                     <div class="col-4">
-                        <span class="field-label">{{ trans('ts-back-cover') }}</span>
-                        <span class="field-value">{{ fsc.servicio.ts_tapa }}</span>
+                        {{ _self.field(trans('ts-back-cover'), fsc.servicio.ts_tapa) }}
                     </div>
                 </div>
             {% endif %}
 
             <div class="row">
                 <div class="col-12">
-                    <span class="field-label">{{ trans('description') }}</span>
-                    <span class="field-value">{{ fsc.servicio.descripcion }}</span>
+                    {{ _self.field(trans('description'), fsc.servicio.descripcion) }}
                 </div>
                 <div class="col-12">
-                    <span class="field-label">{{ trans('solution') }}</span>
-                    <span class="field-value">{{ fsc.servicio.solucion }}</span>
+                    {{ _self.field(trans('solution'), fsc.servicio.solucion) }}
                 </div>
                 <div class="col-12">
-                    <span class="field-label">{{ trans('observations') }}</span>
-                    <span class="field-value">{{ fsc.servicio.observaciones }}</span>
+                    {{ _self.field(trans('observations'), fsc.servicio.observaciones) }}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-12">
-                    <span class="field-label">{{ trans('served-by') }}</span>
-                    <span class="field-value">{{ fsc.agente.nombre ?? fsc.servicio.nick }}</span>
+                    {{ _self.field(trans('served-by'), fsc.agente.nombre ?? fsc.servicio.nick) }}
                 </div>
             </div>
 
@@ -225,7 +205,6 @@
                 <div class="signature-box">
                     {{ trans('customer-signature') }}
                 </div>
-            {% else %}
                 <p class="legal-text">{{ trans('signature-acceptance-notice') }}</p>
             {% endif %}
         </div>
