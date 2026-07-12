@@ -1,6 +1,7 @@
 {
     "device-data": "Datos del dispositivo",
-    "device-checklist": "Estado físico del equipo entregado por el cliente",
+    "device-checklist": "Estado físico del equipo",
+    "diagnosis": "Diagnóstico",
     "ts-brand": "Marca",
     "ts-imei": "IMEI",
     "ts-unlock-code": "Código de desbloqueo",

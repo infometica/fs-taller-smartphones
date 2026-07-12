@@ -14,7 +14,8 @@
         }
 
         body {
-            font-size: 11px;
+            font-size: 10px;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         .no-print {
@@ -22,10 +23,11 @@
         }
 
         .ticket-half {
-            font-size: 11px;
+            font-size: 10px;
             height: 132mm;
             display: flex;
             flex-direction: column;
+            color: #212529;
         }
 
         .ticket-content {
@@ -34,41 +36,109 @@
 
         .signature-spacer {
             flex: 1 1 auto;
+            min-height: 6px;
         }
 
-        .ticket-half h4 {
-            font-size: 13px;
-            font-weight: bold;
-            border-bottom: 1px solid #999;
-            padding-bottom: 2px;
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #34519e;
+            padding-bottom: 3px;
             margin-bottom: 6px;
         }
 
-        .ticket-half h5 {
-            font-size: 11px;
-            font-weight: bold;
-            margin-top: 4px;
-            margin-bottom: 3px;
-            background: #f2f2f2;
-            padding: 2px 6px;
+        .ticket-header-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #22314f;
         }
 
-        .field-label {
-            font-weight: bold;
+        .ticket-header-title .code {
+            font-weight: 400;
+            color: #555;
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        .ticket-header-meta {
+            font-size: 10px;
+            color: #555;
+            text-align: right;
+        }
+
+        .ticket-header-meta strong {
+            color: #222;
+        }
+
+        .ticket-header-meta .sep {
+            margin: 0 6px;
+            color: #c2c2c2;
+        }
+
+        .section {
+            border: 1px solid #e3e6ea;
+            border-left: 3px solid #34519e;
+            border-radius: 4px;
+            background: #fafbfc;
+            padding: 3px 8px;
+            margin-bottom: 4px;
+        }
+
+        .section-title {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: #34519e;
+            margin-bottom: 3px;
+        }
+
+        .field-inline {
+            margin-bottom: 2px;
+        }
+
+        .field-inline .field-label {
+            font-weight: 700;
+        }
+
+        .field-inline .field-label::after {
+            content: ':';
+            margin-right: 4px;
+        }
+
+        .field-block {
+            margin-bottom: 4px;
+        }
+
+        .field-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .field-block .field-label {
             display: block;
-            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 1px;
         }
 
-        .field-value {
-            min-height: 12px;
-            line-height: 1.1;
-            margin-bottom: 3px;
+        .field-block .field-value {
+            display: block;
+        }
+
+        .checklist-grid {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .checklist-grid .field-inline {
+            flex: 0 0 33.33%;
         }
 
         .signature-box {
             flex: 0 0 auto;
             border-top: 1px solid #000;
-            padding-top: 2px;
+            padding-top: 3px;
             text-align: center;
         }
 
@@ -88,6 +158,10 @@
             .ticket-divider {
                 border-left: 1px dashed #999;
             }
+
+            .section {
+                background: #fff;
+            }
         }
     </style>
 {% endblock %}
@@ -104,114 +178,92 @@
 {% block messages %}{% endblock %}
 
 {% block body %}
-    {% macro field(label, value) %}
-        <span class="field-label">{{ label }}</span>
-        <span class="field-value">{{ (value is empty) ? '-' : value }}</span>
+    {% macro fieldInline(label, value) %}
+        <div class="field-inline"><span class="field-label">{{ label }}</span> <span class="field-value">{{ (value is empty) ? '-' : value }}</span></div>
+    {% endmacro %}
+
+    {% macro fieldBlock(label, value) %}
+        <div class="field-block"><span class="field-label">{{ label }}</span><span class="field-value">{{ (value is empty) ? '-' : value }}</span></div>
     {% endmacro %}
 
     {% macro parte(fsc, taller) %}
         <div class="ticket-half">
         <div class="ticket-content">
-            <h4>{{ trans('ticket-label') }}: {{ fsc.servicio.codigo }}</h4>
-
-            <div class="row">
-                <div class="col-6">
-                    {{ _self.field(trans('date'), fsc.servicio.fecha) }}
+            <div class="ticket-header">
+                <div class="ticket-header-title">
+                    {{ trans('ticket-label') }}<span class="code">{{ fsc.servicio.codigo }}</span>
                 </div>
-                <div class="col-6">
-                    {{ _self.field(trans('hour'), fsc.servicio.hora) }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-8">
-                    {{ _self.field(trans('customer'), fsc.cliente.nombre) }}
-                </div>
-                <div class="col-4">
-                    {{ _self.field(trans('phone'), fsc.servicio.telefono1) }}
+                <div class="ticket-header-meta">
+                    {{ trans('date') }} <strong>{{ fsc.servicio.fecha }}</strong>
+                    <span class="sep">&bull;</span>
+                    {{ trans('hour') }} <strong>{{ fsc.servicio.hora }}</strong>
+                    <span class="sep">&bull;</span>
+                    {{ trans('served-by') }} <strong>{{ (fsc.agente.nombre ?? fsc.servicio.nick) is empty ? '-' : (fsc.agente.nombre ?? fsc.servicio.nick) }}</strong>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-4">
-                    {{ _self.field(trans('ts-brand'), fsc.servicio.ts_marca) }}
-                </div>
-                <div class="col-4">
-                    {{ _self.field(trans('model'), fsc.servicio.ts_modelo) }}
-                </div>
-                <div class="col-4">
-                    {{ _self.field(trans('color'), fsc.servicio.ts_color) }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    {{ _self.field(trans('ts-imei'), fsc.servicio.ts_imei) }}
-                </div>
-                <div class="col-6">
-                    {{ _self.field(trans('ts-unlock-code'), fsc.servicio.ts_codigo_desbloqueo) }}
+            <div class="section">
+                <div class="section-title">{{ trans('customer') }}</div>
+                <div class="row">
+                    <div class="col-8">
+                        {{ _self.fieldInline(trans('customer'), fsc.cliente.nombre) }}
+                    </div>
+                    <div class="col-4">
+                        {{ _self.fieldInline(trans('phone'), fsc.servicio.telefono1) }}
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    {{ _self.field(trans('ts-device-condition'), fsc.servicio.ts_condicion_equipo) }}
+            <div class="section">
+                <div class="section-title">{{ trans('device-data') }}</div>
+                <div class="row">
+                    <div class="col-4">
+                        {{ _self.fieldInline(trans('ts-brand'), fsc.servicio.ts_marca) }}
+                    </div>
+                    <div class="col-4">
+                        {{ _self.fieldInline(trans('model'), fsc.servicio.ts_modelo) }}
+                    </div>
+                    <div class="col-4">
+                        {{ _self.fieldInline(trans('color'), fsc.servicio.ts_color) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        {{ _self.fieldInline(trans('ts-imei'), fsc.servicio.ts_imei) }}
+                    </div>
+                    <div class="col-6">
+                        {{ _self.fieldInline(trans('ts-unlock-code'), fsc.servicio.ts_codigo_desbloqueo) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {{ _self.fieldBlock(trans('ts-device-condition'), fsc.servicio.ts_condicion_equipo) }}
+                    </div>
                 </div>
             </div>
 
             {% if taller %}
-                <h5>{{ trans('device-checklist') }}</h5>
-                <div class="row">
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-lcd-screen'), fsc.servicio.ts_lcd) }}
-                    </div>
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-touch-screen'), fsc.servicio.ts_touch) }}
-                    </div>
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-fingerprint-face'), fsc.servicio.ts_huella_face) }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-cameras'), fsc.servicio.ts_camaras) }}
-                    </div>
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-wifi-bluetooth'), fsc.servicio.ts_wifi_bluetooth) }}
-                    </div>
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-speakers'), fsc.servicio.ts_altavoces) }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-network'), fsc.servicio.ts_red) }}
-                    </div>
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-earpiece'), fsc.servicio.ts_auricular) }}
-                    </div>
-                    <div class="col-4">
-                        {{ _self.field(trans('ts-back-cover'), fsc.servicio.ts_tapa) }}
+                <div class="section">
+                    <div class="section-title">{{ trans('device-checklist') }}</div>
+                    <div class="checklist-grid">
+                        {{ _self.fieldInline(trans('ts-lcd-screen'), fsc.servicio.ts_lcd) }}
+                        {{ _self.fieldInline(trans('ts-touch-screen'), fsc.servicio.ts_touch) }}
+                        {{ _self.fieldInline(trans('ts-fingerprint-face'), fsc.servicio.ts_huella_face) }}
+                        {{ _self.fieldInline(trans('ts-cameras'), fsc.servicio.ts_camaras) }}
+                        {{ _self.fieldInline(trans('ts-wifi-bluetooth'), fsc.servicio.ts_wifi_bluetooth) }}
+                        {{ _self.fieldInline(trans('ts-speakers'), fsc.servicio.ts_altavoces) }}
+                        {{ _self.fieldInline(trans('ts-network'), fsc.servicio.ts_red) }}
+                        {{ _self.fieldInline(trans('ts-earpiece'), fsc.servicio.ts_auricular) }}
+                        {{ _self.fieldInline(trans('ts-back-cover'), fsc.servicio.ts_tapa) }}
                     </div>
                 </div>
             {% endif %}
 
-            <div class="row">
-                <div class="col-12">
-                    {{ _self.field(trans('description'), fsc.servicio.descripcion) }}
-                </div>
-                <div class="col-12">
-                    {{ _self.field(trans('solution'), fsc.servicio.solucion) }}
-                </div>
-                <div class="col-12">
-                    {{ _self.field(trans('observations'), fsc.servicio.observaciones) }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    {{ _self.field(trans('served-by'), fsc.agente.nombre ?? fsc.servicio.nick) }}
-                </div>
+            <div class="section">
+                <div class="section-title">{{ trans('diagnosis') }}</div>
+                {{ _self.fieldBlock(trans('description'), fsc.servicio.descripcion) }}
+                {{ _self.fieldBlock(trans('solution'), fsc.servicio.solucion) }}
+                {{ _self.fieldBlock(trans('observations'), fsc.servicio.observaciones) }}
             </div>
         </div>
 
