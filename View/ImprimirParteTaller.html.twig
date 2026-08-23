@@ -242,22 +242,20 @@
                 </div>
             </div>
 
-            {% if taller %}
-                <div class="section">
-                    <div class="section-title">{{ trans('device-checklist') }}</div>
-                    <div class="checklist-grid">
-                        {{ _self.fieldInline(trans('ts-lcd-screen'), fsc.servicio.ts_lcd) }}
-                        {{ _self.fieldInline(trans('ts-touch-screen'), fsc.servicio.ts_touch) }}
-                        {{ _self.fieldInline(trans('ts-fingerprint-face'), fsc.servicio.ts_huella_face) }}
-                        {{ _self.fieldInline(trans('ts-cameras'), fsc.servicio.ts_camaras) }}
-                        {{ _self.fieldInline(trans('ts-wifi-bluetooth'), fsc.servicio.ts_wifi_bluetooth) }}
-                        {{ _self.fieldInline(trans('ts-speakers'), fsc.servicio.ts_altavoces) }}
-                        {{ _self.fieldInline(trans('ts-network'), fsc.servicio.ts_red) }}
-                        {{ _self.fieldInline(trans('ts-earpiece'), fsc.servicio.ts_auricular) }}
-                        {{ _self.fieldInline(trans('ts-back-cover'), fsc.servicio.ts_tapa) }}
-                    </div>
+            <div class="section">
+                <div class="section-title">{{ trans('device-checklist') }}</div>
+                <div class="checklist-grid">
+                    {{ _self.fieldInline(trans('ts-lcd-screen'), fsc.servicio.ts_lcd) }}
+                    {{ _self.fieldInline(trans('ts-touch-screen'), fsc.servicio.ts_touch) }}
+                    {{ _self.fieldInline(trans('ts-fingerprint-face'), fsc.servicio.ts_huella_face) }}
+                    {{ _self.fieldInline(trans('ts-cameras'), fsc.servicio.ts_camaras) }}
+                    {{ _self.fieldInline(trans('ts-wifi-bluetooth'), fsc.servicio.ts_wifi_bluetooth) }}
+                    {{ _self.fieldInline(trans('ts-speakers'), fsc.servicio.ts_altavoces) }}
+                    {{ _self.fieldInline(trans('ts-network'), fsc.servicio.ts_red) }}
+                    {{ _self.fieldInline(trans('ts-earpiece'), fsc.servicio.ts_auricular) }}
+                    {{ _self.fieldInline(trans('ts-back-cover'), fsc.servicio.ts_tapa) }}
                 </div>
-            {% endif %}
+            </div>
 
             <div class="section">
                 <div class="section-title">{{ trans('diagnosis') }}</div>
