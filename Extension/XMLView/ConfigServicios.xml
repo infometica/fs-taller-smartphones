@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : ConfigServicios.xml (Extension)
+    Description:
+        Añade a Admin > Servicios > "Imprimir ticket" los checkboxes para
+        activar/desactivar la impresión de los datos del dispositivo y el
+        checklist de estado físico añadidos por TallerSmartphones. Los
+        checkboxes solo controlan el ajuste; quien realmente imprime esas
+        secciones en el ticket ESC/POS es la extensión
+        Extension/Lib/Tickets/Service.php (hook setFooterBefore).
+-->
+<view>
+    <columns>
+        <group name="print-ticket">
+            <column name="print-ts-device-data" order="230">
+                <widget type="checkbox" fieldname="print_ticket_ts_device_data"/>
+            </column>
+            <column name="print-ts-checklist" order="240">
+                <widget type="checkbox" fieldname="print_ticket_ts_checklist"/>
+            </column>
+        </group>
+    </columns>
+</view>
