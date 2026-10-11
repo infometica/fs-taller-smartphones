@@ -13,6 +13,7 @@ class Init extends InitClass
     {
         $this->loadExtension(new Extension\Controller\EditServicioAT());
         $this->loadExtension(new Extension\Model\ServicioAT());
+        $this->loadExtension(new Extension\Lib\Tickets\Service());
     }
 
     public function uninstall(): void
