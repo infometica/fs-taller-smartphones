@@ -47,9 +47,6 @@ class Service
                 if (!empty($model->ts_imei)) {
                     $lines[] = Tools::trans('ts-imei') . ': ' . $model->ts_imei;
                 }
-                if (!empty($model->ts_codigo_desbloqueo)) {
-                    $lines[] = Tools::trans('ts-unlock-code') . ': ' . $model->ts_codigo_desbloqueo;
-                }
                 if (!empty($model->ts_condicion_equipo)) {
                     $lines[] = Tools::trans('ts-device-condition') . ': ' . $model->ts_condicion_equipo;
                 }
