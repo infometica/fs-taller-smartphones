@@ -31,8 +31,8 @@ use Mike42\Escpos\Printer;
 class ServicioTicket extends Service
 {
     /**
-     * Igual que la cabecera de Tickets, pero con el logo de Infometica (Assets/ticket-logo.png,
-     * 1 bit, 384 px) en lugar del nombre corto, y una línea en blanco entre el nombre completo
+     * Igual que la cabecera de Tickets, pero con el logo de Infometica (Assets/ticket-logo-largo.png,
+     * 1 bit, 576 px) en lugar del nombre corto, y una línea en blanco entre el nombre completo
      * de la empresa y su dirección. Si el logo no se puede cargar, imprime el nombre corto.
      */
     protected static function setHeader(ModelClass $model, TicketPrinter $printer, string $title): void
@@ -78,7 +78,7 @@ class ServicioTicket extends Service
     protected static function printLogo(): bool
     {
         try {
-            $file = dirname(__DIR__, 2) . '/Assets/ticket-logo.png';
+            $file = dirname(__DIR__, 2) . '/Assets/ticket-logo-largo.png';
             static::$escpos->bitImage(EscposImage::load($file, false));
             static::$escpos->feed();
             return true;
