@@ -32,12 +32,14 @@ class Service
                 return;
             }
 
-            if (Tools::settings('servicios', 'print_ticket_ts_device_data', false)) {
+            if (Tools::settings('servicios', 'print_ticket_ts_device_data', true)) {
                 $lines = [];
 
-                $brandModel = trim(($model->ts_marca ?? '') . ' ' . ($model->ts_modelo ?? ''));
-                if ($brandModel !== '') {
-                    $lines[] = $brandModel;
+                if (!empty($model->ts_marca)) {
+                    $lines[] = Tools::trans('ts-brand') . ': ' . $model->ts_marca;
+                }
+                if (!empty($model->ts_modelo)) {
+                    $lines[] = Tools::trans('model') . ': ' . $model->ts_modelo;
                 }
                 if (!empty($model->ts_color)) {
                     $lines[] = Tools::trans('color') . ': ' . $model->ts_color;
