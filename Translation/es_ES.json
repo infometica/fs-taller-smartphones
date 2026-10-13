@@ -15,6 +15,8 @@
     "ts-network": "Red",
     "ts-earpiece": "Auricular",
     "ts-back-cover": "Tapa",
+    "print-ts-device-data": "Imprimir datos del dispositivo",
+    "print-ts-checklist": "Imprimir estado físico del equipo",
     "served-by": "Le atendió",
     "print-service-ticket": "Imprimir parte",
     "print-landscape-reminder": "Recuerda imprimir en horizontal",
