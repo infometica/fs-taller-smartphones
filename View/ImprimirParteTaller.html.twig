@@ -228,12 +228,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="{{ taller ? 'col-6' : 'col-12' }}">
                         {{ _self.fieldInline(trans('ts-imei'), fsc.servicio.ts_imei) }}
                     </div>
+                    {% if taller %}
                     <div class="col-6">
                         {{ _self.fieldInline(trans('ts-unlock-code'), fsc.servicio.ts_codigo_desbloqueo) }}
                     </div>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="col-12">
