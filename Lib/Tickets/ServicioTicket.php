@@ -9,6 +9,8 @@ use FacturaScripts\Core\Template\ModelClass;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\Tickets\Service;
 use FacturaScripts\Dinamic\Model\TicketPrinter;
+use Mike42\Escpos\EscposImage;
+use Mike42\Escpos\Printer;
 
 /**
  * Ticket de servicio con el diseño "tres columnas" del taller:
@@ -28,6 +30,63 @@ use FacturaScripts\Dinamic\Model\TicketPrinter;
  */
 class ServicioTicket extends Service
 {
+    /**
+     * Igual que la cabecera de Tickets, pero con el logo de Infometica (Assets/ticket-logo.png,
+     * 1 bit, 384 px) en lugar del nombre corto, y una línea en blanco entre el nombre completo
+     * de la empresa y su dirección. Si el logo no se puede cargar, imprime el nombre corto.
+     */
+    protected static function setHeader(ModelClass $model, TicketPrinter $printer, string $title): void
+    {
+        $extensionVar = new static();
+        $extensionVar->pipe('setHeaderBefore', $model, $printer);
+
+        $company = $model->getCompany();
+
+        static::$escpos->setJustification(Printer::JUSTIFY_CENTER);
+        if (false === static::printLogo()) {
+            static::$escpos->setTextSize($printer->title_font_size, $printer->title_font_size);
+            static::$escpos->text(static::sanitize($company->nombrecorto) . "\n");
+        }
+
+        static::$escpos->setTextSize($printer->head_font_size, $printer->head_font_size);
+        static::$escpos->text(static::sanitize($company->nombre) . "\n\n");
+        static::$escpos->setJustification();
+
+        static::$escpos->text(static::sanitize($company->direccion) . "\n");
+        static::$escpos->text(static::sanitize('CP: ' . $company->codpostal . ', ' . $company->ciudad) . "\n");
+        static::$escpos->text(static::sanitize($company->tipoidfiscal . ': ' . $company->cifnif) . "\n\n");
+
+        if ($printer->print_comp_tlf) {
+            $phones = array_filter([$company->telefono1, $company->telefono2]);
+            if ($phones) {
+                static::$escpos->text(static::sanitize(implode(' / ', $phones)) . "\n");
+            }
+        }
+
+        static::$escpos->text(static::sanitize($title) . "\n");
+        static::setHeaderTPV($model, $printer);
+
+        if ($printer->head) {
+            static::$escpos->setJustification(Printer::JUSTIFY_CENTER);
+            static::$escpos->text(static::sanitize($printer->head) . "\n\n");
+            static::$escpos->setJustification();
+        }
+
+        $extensionVar->pipe('setHeaderAfter', $model, $printer);
+    }
+
+    protected static function printLogo(): bool
+    {
+        try {
+            $file = dirname(__DIR__, 2) . '/Assets/ticket-logo.png';
+            static::$escpos->bitImage(EscposImage::load($file, false));
+            static::$escpos->feed();
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
     protected static function setBody(ModelClass $model, TicketPrinter $printer): void
     {
         $width = max(24, (int)$printer->linelen);
