@@ -3,7 +3,7 @@
     "device-checklist": "Estado físico del equipo",
     "diagnosis": "Diagnóstico",
     "ts-brand": "Marca",
-    "ts-imei": "IMEI",
+    "ts-imei": "Nº Serie / IMEI",
     "ts-unlock-code": "Código de desbloqueo",
     "ts-device-condition": "Condición del equipo",
     "ts-lcd-screen": "Display / LCD",
