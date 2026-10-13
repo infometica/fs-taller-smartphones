@@ -35,6 +35,7 @@ class ServicioTicket extends Service
         $third = intdiv($width, 3);
         $customer = $model->getCustomer();
 
+        static::$escpos->selectCharacterTable(0);
         static::$escpos->setTextSize($printer->font_size, $printer->font_size);
         static::line(str_repeat('=', $width));
 
@@ -54,9 +55,9 @@ class ServicioTicket extends Service
             $cols = [$third, $third, $width - 2 * $third];
             static::line('');
             static::bold(static::columns([
-                mb_strtoupper(Tools::trans('ts-brand')),
-                mb_strtoupper(Tools::trans('model')),
-                mb_strtoupper(Tools::trans('color')),
+                Tools::trans('ts-brand'),
+                Tools::trans('model'),
+                Tools::trans('color'),
             ], $cols));
             static::line(static::columns([(string)$model->ts_marca, (string)$model->ts_modelo, (string)$model->ts_color], $cols));
             if (!empty($model->ts_imei)) {
@@ -66,7 +67,7 @@ class ServicioTicket extends Service
 
         // cliente
         static::line('');
-        static::bold(mb_strtoupper(Tools::trans('customer')));
+        static::bold(Tools::trans('customer'));
         static::line((string)$customer->razonsocial);
         $phones = array_filter([
             $model->telefono1 ?: $customer->telefono1,
@@ -108,6 +109,32 @@ class ServicioTicket extends Service
         static::line(str_repeat('=', $width));
     }
 
+    /**
+     * El sanitize de Tickets quita todos los acentos para no depender de la página de
+     * códigos de la impresora. Aquí conservamos los caracteres que existen en CP437
+     * (la tabla que traen por defecto las impresoras térmicas: á é í ó ú ñ ü ¿ ¡ ...)
+     * y la librería escpos los codifica sola; el resto (Á Í Ó Ú, símbolos...) se
+     * degradan a ASCII como siempre.
+     */
+    protected static function sanitize(?string $txt): string
+    {
+        if ($txt === null || $txt === '') {
+            return '';
+        }
+
+        if (!mb_check_encoding($txt, 'UTF-8')) {
+            $txt = mb_convert_encoding($txt, 'UTF-8', 'ISO-8859-1');
+        }
+
+        $keep = 'ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑªº¿¡';
+        $out = '';
+        foreach (preg_split('//u', $txt, -1, PREG_SPLIT_NO_EMPTY) as $char) {
+            $out .= (strlen($char) === 1 || mb_strpos($keep, $char) !== false) ? $char : parent::sanitize($char);
+        }
+
+        return $out;
+    }
+
     protected static function bold(string $text): void
     {
         static::$escpos->setEmphasis(true);
@@ -134,7 +161,7 @@ class ServicioTicket extends Service
 
     protected static function section(string $title, string $text, int $width): void
     {
-        static::bold(mb_strtoupper(static::sanitize($title)));
+        static::bold(static::sanitize($title));
         foreach (explode("\n", wordwrap(static::sanitize($text), $width, "\n", true)) as $line) {
             static::line($line);
         }
