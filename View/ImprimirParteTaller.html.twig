@@ -99,6 +99,20 @@
             margin-bottom: 2px;
         }
 
+        /* Patrón de desbloqueo: arriba a la derecha de «Datos del dispositivo», sin sumar alto. */
+        .section.con-patron {
+            position: relative;
+            padding-right: 58px;
+        }
+
+        .patron-desbloqueo {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            width: 46px;
+            height: 46px;
+        }
+
         .field-inline .field-label {
             font-weight: 700;
         }
@@ -186,7 +200,22 @@
         <div class="field-block"><span class="field-label">{{ label }}</span><span class="field-value">{{ (value is empty) ? '-' : value }}</span></div>
     {% endmacro %}
 
+    {% macro patron(p) %}
+        <svg class="patron-desbloqueo" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            {% for y in 0..2 %}{% for x in 0..2 %}
+                <circle cx="{{ 10 + x * 20 }}" cy="{{ 10 + y * 20 }}" r="2.5" fill="#c2c7d0"/>
+            {% endfor %}{% endfor %}
+            <polyline points="{% for q in p.puntos %}{{ 10 + q.x * 20 }},{{ 10 + q.y * 20 }} {% endfor %}" fill="none" stroke="#34519e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            {% for q in p.puntos %}
+                <circle cx="{{ 10 + q.x * 20 }}" cy="{{ 10 + q.y * 20 }}" r="3.5" fill="#34519e"/>
+            {% endfor %}
+            {% set i = p.puntos|first %}
+            <circle cx="{{ 10 + i.x * 20 }}" cy="{{ 10 + i.y * 20 }}" r="7" fill="none" stroke="#34519e" stroke-width="1.5"/>
+        </svg>
+    {% endmacro %}
+
     {% macro parte(fsc, taller) %}
+        {% set patron = taller ? fsc.patronDesbloqueo() : null %}
         <div class="ticket-half">
         <div class="ticket-content">
             <div class="ticket-header">
@@ -214,7 +243,8 @@
                 </div>
             </div>
 
-            <div class="section">
+            <div class="section{{ patron ? ' con-patron' : '' }}">
+                {% if patron %}{{ _self.patron(patron) }}{% endif %}
                 <div class="section-title">{{ trans('device-data') }}</div>
                 <div class="row">
                     <div class="col-4">
@@ -233,7 +263,11 @@
                     </div>
                     {% if taller %}
                     <div class="col-6">
-                        {{ _self.fieldInline(trans('ts-unlock-code'), fsc.servicio.ts_codigo_desbloqueo) }}
+                        {% if patron %}
+                            {{ _self.fieldInline(trans('ts-unlock-code'), patron.secuencia ~ (patron.texto ? ' · ' ~ patron.texto : '')) }}
+                        {% else %}
+                            {{ _self.fieldInline(trans('ts-unlock-code'), fsc.servicio.ts_codigo_desbloqueo) }}
+                        {% endif %}
                     </div>
                     {% endif %}
                 </div>
