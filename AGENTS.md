@@ -37,7 +37,10 @@ FacturaScripts, añadiendo solo los campos que Servicios no trae de fábrica.
 - `ts_imei` es un solo campo (no `imei1`/`imei2` como en el original): el
   parte real del taller solo tiene un IMEI.
 - `ts_codigo_desbloqueo` = código/patrón de desbloqueo del equipo, no un
-  código de inventario.
+  código de inventario. El panel admin guarda los patrones como
+  «Patrón 1-5-9-6[ · texto]» (puntos 1-9 de una rejilla 3×3, como un teclado);
+  `ImprimirParteTaller::patronDesbloqueo()` lo reconoce y la copia del taller
+  lo dibuja en SVG (posición absoluta en «Datos del dispositivo»: no suma alto).
 
 ## Estructura
 
