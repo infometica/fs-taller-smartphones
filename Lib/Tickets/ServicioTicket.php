@@ -31,7 +31,7 @@ use Mike42\Escpos\Printer;
 class ServicioTicket extends Service
 {
     /**
-     * Igual que la cabecera de Tickets, pero con el logo de Infometica (Assets/ticket-logo.png,
+     * Igual que la cabecera de Tickets, pero con el logo de Infomética (Assets/ticket-logo.png,
      * 1 bit, 384 px, sin el lema) en lugar del nombre corto, y una línea en blanco entre el nombre completo
      * de la empresa y su dirección. Si el logo no se puede cargar, imprime el nombre corto.
      */
