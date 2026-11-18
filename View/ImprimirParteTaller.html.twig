@@ -1,6 +1,6 @@
 {#
     Parte de servicio para talleres de smartphones/tablets.
-    A5 apaisado, dos mitades: copia cliente (izquierda) y copia taller (derecha, con
+    A4 apaisado, dos mitades: copia cliente (izquierda) y copia taller (derecha, con
     checklist de estado físico y firma del cliente).
 #}
 {% extends "Master/MicroTemplate.html.twig" %}
@@ -9,7 +9,7 @@
     {{ parent() }}
     <style>
         @page {
-            size: A5 landscape;
+            size: A4 landscape;
             margin: 8mm;
         }
 
@@ -24,7 +24,7 @@
 
         .ticket-half {
             font-size: 10px;
-            height: 132mm;
+            height: 193mm;
             display: flex;
             flex-direction: column;
             color: #212529;
@@ -82,8 +82,8 @@
             border-left: 3px solid #34519e;
             border-radius: 4px;
             background: #fafbfc;
-            padding: 3px 8px;
-            margin-bottom: 4px;
+            padding: 14px 12px;
+            margin-bottom: 22px;
         }
 
         .section-title {
@@ -92,7 +92,7 @@
             text-transform: uppercase;
             letter-spacing: .05em;
             color: #34519e;
-            margin-bottom: 3px;
+            margin-bottom: 9px;
         }
 
         .field-inline {
@@ -123,7 +123,7 @@
         }
 
         .field-block {
-            margin-bottom: 4px;
+            margin-bottom: 14px;
         }
 
         .field-block:last-child {
@@ -313,7 +313,7 @@
 
     <div class="no-print p-2 bg-light border-bottom">
         <strong>{{ trans('print-landscape-reminder') }}</strong>
-        (A5 {{ trans('landscape') }})
+        (A4 {{ trans('landscape') }})
     </div>
 
     <div class="container-fluid">

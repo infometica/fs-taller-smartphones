@@ -79,7 +79,7 @@ estructura real de la tabla, así que basta con que la columna exista en
   original) con dos copias lado a lado — cliente (izquierda, sin checklist) y
   taller (derecha, con el checklist de estado físico y línea de firma del
   cliente). Extiende `Master/MicroTemplate.html.twig` (layout sin menú/sidebar
-  de FacturaScripts) con CSS `@page { size: A5 landscape }` y
+  de FacturaScripts) con CSS `@page { size: A4 landscape }` y
   `window.print()` automático al cargar.
 - Botón "Imprimir parte" añadido a `EditServicioAT` vía
   `Extension/Controller/EditServicioAT.php` (`loadData`, botón tipo `link`
@@ -145,9 +145,9 @@ ticket"** (plugin `PrintTicket`, ya buggeado de antes, no relacionado con
 nosotros). El único sitio donde vive nuestro diseño de dos copias es el
 botón **"Imprimir parte"** (`ImprimirParteTaller`).
 
-## El contenido debe caber en una sola página A5 (¡medirlo, no adivinarlo!)
+## El contenido debe caber en una sola página A4 (¡medirlo, no adivinarlo!)
 
-El área útil de A5 apaisado con `margin: 8mm` es ~733×499px (96dpi). La copia
+El área útil de A4 apaisado con `margin: 8mm` es ~1062×733px (96dpi; cada copia ~140×193mm). La copia
 "taller" (con checklist) es la más alta y quedó midiendo 520px en la primera
 versión → se desbordaba 21px a una segunda página, dejando "Firma del
 cliente" sola y una página en blanco. Ajustado el espaciado (títulos, campos,
@@ -157,7 +157,7 @@ Para comprobar esto sin depender de "a ojo" ni de pedir capturas al usuario:
 renderizar la plantilla real (técnica de `requiresAuth=false` por Reflection,
 ver sección de impresión más abajo) y medir con Chromium headless
 (`getBoundingClientRect().height` de `.ticket-half` con
-`page.emulateMedia({media:'print'})` y viewport = ancho útil de A5) contra el
+`page.emulateMedia({media:'print'})` y viewport = ancho útil de A4) contra el
 alto disponible. Si se añaden más campos al checklist en el futuro, volver a
 medir así antes de darlo por bueno.
 
@@ -167,7 +167,7 @@ medir así antes de darlo por bueno.
 (Cliente, Datos del dispositivo, Estado físico, Diagnóstico) con acento de
 color. Cualquier padding/margin que se añada a `.section` sale directamente
 del `.signature-spacer` (flex:1 dentro de un `.ticket-half` de altura fija
-132mm) — no hay margen "gratis". Antes de subir cambios de espaciado, medir
+193mm) — no hay margen "gratis". Antes de subir cambios de espaciado, medir
 siempre con Chromium headless (ver técnica más abajo) el `spacer` resultante
 en la copia "taller"; que no baje de ~25-30px (~7-8mm) o no queda hueco real
 para firmar a mano.
